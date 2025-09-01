@@ -1,11 +1,11 @@
-# RISE-LLM
+# RISE
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)
 
-**R**einforced **I**terative **S**trategy **E**nhancement for Large Language Models.
+**R**eason-**I**nspire-**S**trengthen-**E**xpertise for Large Language Models.
 
-本项目旨在通过结合 CoT（思维链）和 R1（策略增强）训练，来提升模型在复杂推理和策略规划任务上的性能。项目使用 [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) 进行高效的**预热 SFT（监督微调）**，而核心的 **RISE-CoT** 和 **RISE-R1** 训练阶段则由我们自定义的高效训练框架实现。
+本项目旨在通过创新的训练方法提升大语言模型在复杂推理任务上的能力。项目采用 HuggingFace 数据集格式，支持多模态输入（文本和图像），并提供完整的训练流程，包括可选的模型预热和核心的 RISE 训练阶段。
 
 > **Code is Coming Soon!**
 > 本项目正在积极开发中，代码即将发布。请点击右上角的 "Watch" 和 "Star" 以获取最新更新！
@@ -16,8 +16,8 @@
 - [功能特性](#-功能特性)
 - [安装依赖](#-安装依赖)
 - [🚀 快速开始](#-快速开始)
-  - [1. 数据集制作](#1-数据集制作)
-  - [2. 预热 SFT (使用 LLaMA-Factory)](#2-预热-sft-使用-llama-factory)
+  - [1. 数据集格式](#1-数据集格式)
+  - [2. 可选预热 SFT (使用 LLaMA-Factory)](#2-可选预热-sft-使用-llama-factory)
   - [3. RISE-CoT 训练 (自定义训练框架)](#3-rise-cot-训练-自定义训练框架)
   - [4. RISE-R1 训练 (自定义训练框架)](#4-rise-r1-训练-自定义训练框架)
   - [5. 推理与验证](#5-推理与验证)
@@ -27,42 +27,50 @@
 
 ## 🏗 架构概述
 
-本项目的工作流清晰地分为以下几个阶段，其中仅预热 SFT 阶段依赖于 LLaMA-Factory：
+本项目的工作流清晰地分为以下几个阶段，其中模型预热阶段是可选的：
 
-1.  **数据准备** (`dataset.json`)
-2.  **模型预热** (**LLaMA-Factory**) -> `sft_model`
+1.  **数据准备** (HuggingFace 格式数据集)
+2.  **可选模型预热** (**LLaMA-Factory**) -> `sft_model` (可选)
 3.  **思维链训练** (**RISE-CoT Framework**) -> `rise_cot_model`
 4.  **策略增强训练** (**RISE-R1 Framework**) -> `rise_r1_model`
 5.  **推理验证** (**Inference Scripts**)
 
 ## ✨ 功能特性
 
-- **混合训练框架**: 结合了成熟的 LLaMA-Factory SFT 流程与我们自主研发的高效训练框架。
+- **多模态支持**: 支持文本和图像输入，适用于复杂的多模态推理任务。
+- **灵活的预处理**: 使用 HuggingFace 数据集格式，包含 problem、image、image_path、answer 和 target 字段。
 - **创新的 RISE 策略**: 实现了核心的两阶段训练方法：
-  - **RISE-CoT**: 我们的自定义训练框架，专注于培养模型的思维链和分步推理能力。
-  - **RISE-R1**: 我们的自定义训练框架，基于强化学习信号，进一步优化模型的策略和输出质量。
-- **高性能与灵活性**: 自定义训练框架为您的特定需求优化，提供更好的控制和效率。
+  - **RISE-CoT (Reason-Inspire)**: 我们的自定义训练框架，专注于培养模型的思维推理和启发能力。
+  - **RISE-R1 (Strengthen-Expertise)**: 我们的自定义训练框架，通过强化学习进一步巩固和专业化模型的技能。
+- **可选预热**: 提供可选的模型预热阶段，可根据需要跳过直接进行 RISE 训练。
 
 ## ⚙️ 安装依赖
 
 在开始之前，请确保您的环境满足以下要求：
-- Python 3.9+
+- Python 3.10+
 - PyTorch (CUDA)
+- HuggingFace Transformers & Datasets
 - Git
 
 1.  **克隆本仓库**:
     ```bash
-    git clone https://github.com/your-username/RISE-LLM.git
-    cd RISE-LLM
+    git clone https://github.com/HSH55/RISE.git
+    cd RISE
     ```
 
-2.  **安装项目依赖**:
+2.  **创建并激活 Python 3.10+ 环境** (推荐使用 conda):
+    ```bash
+    conda create -n rise python=3.10
+    conda activate rise
+    ```
+
+3.  **安装项目依赖**:
     ```bash
     # 安装核心依赖、自定义训练框架所需的库等
     pip install -r requirements.txt
     ```
 
-3.  **安装 LLaMA-Factory (仅用于 SFT 阶段)**:
+4.  **安装 LLaMA-Factory (仅用于可选的 SFT 阶段)**:
     ```bash
     # 可选：如果选择将 LLaMA-Factory 作为子模块嵌入
     git submodule update --init --recursive
@@ -74,25 +82,33 @@
 
 ## 🚀 快速开始
 
-### 1. 数据集制作
+### 1. 数据集格式
 
-我们使用特定格式的 JSON 文件进行训练。您需要准备一个包含 `"instruction"`、`"input"`（可选）和 `"output"` 字段的数据集。
+我们使用 HuggingFace 数据集格式，需要包含以下五个字段：
 
-**示例数据格式 (`dataset.json`)**:
-```json
-[
-  {
-    "instruction": "请解释一下牛顿第一定律。",
-    "input": "",
-    "output": "牛顿第一定律，也称为惯性定律..."
-  }
-]
+- **problem**: 问题描述文本
+- **image**: 图像数据（可以是 PIL 图像或图像张量）
+- **image_path**: 图像文件路径
+- **answer**: 模型生成的答案
+- **target**: 目标答案或参考答案
+
+**示例数据集结构**:
+```python
+from datasets import Dataset
+
+dataset = Dataset.from_dict({
+    "problem": ["问题描述1", "问题描述2", ...],
+    "image": [image1, image2, ...],  # PIL 图像或张量
+    "image_path": ["path/to/image1.jpg", "path/to/image2.png", ...],
+    "answer": ["模型答案1", "模型答案2", ...],
+    "target": ["目标答案1", "目标答案2", ...]
+})
 ```
-*详细的数据集构建脚本和指南将在代码中提供。*
+*详细的数据集构建指南将在代码中提供。*
 
-### 2. 预热 SFT (使用 LLaMA-Factory)
+### 2. 可选预热 SFT (使用 LLaMA-Factory)
 
-此阶段使用 LLaMA-Factory 对基座模型进行高效的监督微调，为后续训练打下基础。
+此阶段是可选的，使用 LLaMA-Factory 对基座模型进行监督微调，为后续训练打下基础。如果已有合适的预训练模型，可以跳过此步骤。
 
 ```bash
 # 进入 LLaMA-Factory 目录或使用其命令行工具
@@ -107,48 +123,50 @@ python src/train_bash.py \
     --per_device_train_batch_size 4 \
     ... # 其他 SFT 参数
 ```
-*此阶段产生 `sft_model`，作为下一步的输入。*
+*此阶段产生 `sft_model`，作为下一步的输入（可选）。*
 
 ### 3. RISE-CoT 训练 (自定义训练框架)
 
-**这是本项目核心的创新训练阶段之一。** 使用我们自定义的训练框架，基于 SFT 模型继续训练，注入思维链能力。
+**Reason-Inspire 阶段**: 使用我们自定义的训练框架，基于基础模型或 SFT 模型进行思维链训练，注入推理启发能力。
 
 ```bash
 # 使用项目自定义的训练脚本
+# 可以从基础模型或 SFT 模型开始
 python rise_cot/train.py \
-    --model_name_or_path ./output/sft_model \
-    --data_path ./data/cot_dataset.json \
+    --model_name_or_path /path/to/base_or_sft_model \
+    --data_path /path/to/huggingface/dataset \
     --output_dir ./output/rise_cot_model \
     --batch_size 8 \
     --learning_rate 2e-5
     ... # 自定义框架的参数
 ```
-*此阶段产生 `rise_cot_model`，具备强大的推理能力。*
+*此阶段产生 `rise_cot_model`，具备强大的推理和启发能力。*
 
 ### 4. RISE-R1 训练 (自定义训练框架)
 
-**这是本项目另一个核心的创新训练阶段。** 使用我们自定义的强化学习框架，对 CoT 模型进行策略增强。本阶段的实现参考了 [VisualRFT](https://github.com/fuliucansheng/VisualRFT) 的工作，采用了类似的拒绝采样与策略优化流程，并针对我们的任务进行了适配与改进。
+**Strengthen-Expertise 阶段**: 使用我们自定义的强化学习框架，对 CoT 模型进行能力巩固和专业化训练。本阶段的实现参考了 [VisualRFT](https://github.com/fuliucansheng/VisualRFT) 的工作，采用了类似的拒绝采样与策略优化流程，并针对我们的任务进行了适配与改进。
 
 ```bash
 # 使用项目自定义的 RL 训练脚本
 python rise_r1/train.py \
     --model_name_or_path ./output/rise_cot_model \
     --reward_model /path/to/reward_model \
-    --data_path ./data/rl_dataset.json \
+    --data_path /path/to/huggingface/dataset \
     --output_dir ./output/rise_r1_model \
     ... # 自定义 RL 框架的参数
 ```
-*此阶段产生最终的 `rise_r1_model`。*
+*此阶段产生最终的 `rise_r1_model`，具备专业级的推理能力。*
 
 ### 5. 推理与验证
 
-使用我们提供的推理脚本加载最终模型，验证其性能。
+使用我们提供的推理脚本加载最终模型，验证其性能。支持多模态输入（文本和图像）。
 
 ```bash
 # 使用项目自定义的推理脚本
 python scripts/inference.py \
     --model_path ./output/rise_r1_model \
-    --prompt "你的问题 here"
+    --problem "你的问题描述" \
+    --image_path "path/to/image.jpg"  # 可选图像输入
 ```
 
 ## 🤝 贡献
@@ -169,6 +187,6 @@ python scripts/inference.py \
 
 本项目建立在众多巨人肩膀之上，我们由衷感谢开源社区带来的巨大贡献。
 
-- **核心框架**: 感谢 [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) 为我们提供了极其高效便捷的 SFT 微调基础，极大地加速了项目初期开发。
-- **方法参考**: 我们的 RISE-R1 (策略增强) 训练阶段深受 [VisualRFT](https://github.com/fuliucansheng/VisualRFT) 工作的启发，借鉴了其基于拒绝采样的强化学习微调思想，在此表示诚挚的感谢。
-- **社区与灵感**: 感谢 Hugging Face、Meta (LLaMA) 等为社区提供了强大的基座模型和生态系统。同时也感谢所有为本项目提供建议和帮助的贡献者。
+- **核心框架**: 感谢 [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) 为我们提供了高效便捷的 SFT 微调基础（可选阶段）。
+- **方法参考**: 我们的 RISE-R1 (Strengthen-Expertise) 训练阶段深受 [VisualRFT](https://github.com/fuliucansheng/VisualRFT) 工作的启发，借鉴了其基于拒绝采样的强化学习微调思想，在此表示诚挚的感谢。
+- **社区与灵感**: 感谢 Hugging Face 提供了强大的数据集和模型生态系统。同时也感谢所有为本项目提供建议和帮助的贡献者。
