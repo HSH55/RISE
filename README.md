@@ -147,7 +147,7 @@ python src/train_bash.py \
 ```bash
 # Using the custom training script
 # Start from either base model or SFT model
-bash RISE-CoT/2B_COCO.sh
+bash RISE-COT/2B_COCO.sh
 ```
 
 *This stage produces `rise_cot_model`, with strong reasoning and inspiration ability.*
@@ -158,7 +158,7 @@ bash RISE-CoT/2B_COCO.sh
 
 ```bash
 # Using the custom RL training script
-bash RISE-r1/2B_COCO.sh
+bash RISE-R1/2B_COCO.sh
 ```
 
 *This stage produces the final `rise_r1_model`, with expert-level reasoning ability.*
