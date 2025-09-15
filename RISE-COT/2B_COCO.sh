@@ -47,7 +47,7 @@ torchrun --nproc_per_node=8 \
     --node_rank=0 \
     --master_addr="127.0.0.1" \
     --master_port=12345 \
-    /data2/HSH/VRFT/Visual-RFT/code/grpo_multidet.py \
+    /RISE/RISE-COT/grpo_multidet.py \
     --output_dir $SAVE_PATH \
     --model_name_or_path $CKPT_PATH \
     --dataset_name $DATA_PATH \
