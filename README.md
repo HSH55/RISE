@@ -147,13 +147,7 @@ python src/train_bash.py \
 ```bash
 # Using the custom training script
 # Start from either base model or SFT model
-python rise_cot/train.py \
-    --model_name_or_path /path/to/base_or_sft_model \
-    --data_path /path/to/huggingface/dataset \
-    --output_dir ./output/rise_cot_model \
-    --batch_size 8 \
-    --learning_rate 2e-5
-    ... # framework-specific parameters
+bash RISE-CoT/2B_COCO.sh
 ```
 
 *This stage produces `rise_cot_model`, with strong reasoning and inspiration ability.*
@@ -164,12 +158,7 @@ python rise_cot/train.py \
 
 ```bash
 # Using the custom RL training script
-python rise_r1/train.py \
-    --model_name_or_path ./output/rise_cot_model \
-    --reward_model /path/to/reward_model \
-    --data_path /path/to/huggingface/dataset \
-    --output_dir ./output/rise_r1_model \
-    ... # custom RL parameters
+bash RISE-r1/2B_COCO.sh
 ```
 
 *This stage produces the final `rise_r1_model`, with expert-level reasoning ability.*
