@@ -82,14 +82,6 @@ Ensure your environment meets the following requirements:
 
 4. **Install LLaMA-Factory (for optional SFT stage only)**:
 
-   ```bash
-   # Optional: add LLaMA-Factory as a submodule
-   git submodule update --init --recursive
-   cd LLaMA-Factory
-   pip install -e .
-   cd ..
-   ```
-
    *Note: Detailed dependency installation instructions will be provided once the codebase is ready.*
 
 ## 🚀 Quick Start
@@ -123,26 +115,13 @@ dataset = Dataset.from_dict({
 ### 2. Optional Warm-up SFT (using LLaMA-Factory)
 
 This optional stage performs supervised fine-tuning on the base model with LLaMA-Factory. If you already have a suitable pre-trained model, you may skip this step.
-
-```bash
-# Run within LLaMA-Factory directory or use its CLI
-python src/train_bash.py \
-    --stage sft \
-    --do_train \
-    --model_name_or_path /path/to/base_model \
-    --dataset your_sft_dataset \
-    --template llama2 \
-    --finetuning_type lora \
-    --output_dir ./output/sft_model \
-    --per_device_train_batch_size 4 \
-    ... # other SFT parameters
-```
-
 *This stage produces `sft_model`, which can be used as input for the next step (optional).*
 
 ### 3. RISE-CoT Training (Custom Training Framework)
 
 **Reason-Inspire Stage**: Uses our custom training framework to perform chain-of-thought training on the base or SFT model, injecting reasoning and inspiration capabilities.
+
+> ⚠️ **Please Note**: Before running the script, make sure to modify the corresponding function addresses, dataset paths, and other relevant configurations in the shell script according to your environment.
 
 ```bash
 # Using the custom training script
@@ -155,6 +134,8 @@ bash RISE-COT/2B_COCO.sh
 ### 4. RISE-R1 Training (Custom Training Framework)
 
 **Strengthen-Expertise Stage**: Uses our custom reinforcement learning framework to refine the CoT model. This stage is inspired by [VisualRFT](https://github.com/fuliucansheng/VisualRFT), adopting a similar rejection sampling and policy optimization process, adapted for our tasks.
+
+> ⚠️ **Please Note**: Before executing, remember to update the function addresses, dataset directories, and any other necessary settings in the script.
 
 ```bash
 # Using the custom RL training script
