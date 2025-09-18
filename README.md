@@ -172,6 +172,20 @@ Please check [CONTRIBUTING.md](CONTRIBUTING.md) (to be created) for details.
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+
+## ✒️Citation
+```
+@misc{hu2025riseenhancingvlmimage,
+      title={RISE: Enhancing VLM Image Annotation with Self-Supervised Reasoning}, 
+      author={Suhang Hu and Wei Hu and Yuhang Su and Fan Zhang},
+      year={2025},
+      eprint={2508.13229},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2508.13229}, 
+}
+```
+
 ## 🙏 Acknowledgments
 
 This project stands on the shoulders of giants, and we sincerely thank the open-source community for their contributions.
