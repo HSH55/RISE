@@ -1,39 +1,7 @@
-import re
 import os
-import random
-import json
-import shutil
-from pathlib import Path
 from PIL import Image
 from datasets import Dataset,load_from_disk
 from tqdm import tqdm
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Configuration
-random.seed(42)
-
-
-
-def save_to_json(question, response, file_path):
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-    try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
-        data = []
-
-    # 检查是否已有相同问题
-    question_exists = any(item.get('Question') == question for item in data)
-    if question_exists:
-        return
-
-    data.append({'Question': question, 'Answer': response})
-
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-
-
 
 
 
