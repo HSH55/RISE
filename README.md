@@ -2,7 +2,7 @@
 
 # [RISE: Enhancing VLM Image Annotation with Self-Supervised Reasoning](https://arxiv.org/abs/2508.13229)
 <div align="center">
-📄 Our Paper Address: https://arxiv.org/abs/2508.13229
+📄 Our Paper Address: [https://arxiv.org/abs/2508.13229](https://openaccess.thecvf.com/content/CVPR2026F/papers/Hu_RISE_Enhancing_VLM_Image_Annotation_with_Self-Supervised_Reasoning_CVPRF_2026_paper.pdf)
 </div>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
