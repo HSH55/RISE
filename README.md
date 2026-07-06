@@ -12,8 +12,6 @@
 
 This project aims to enhance large language models’ capabilities on complex reasoning tasks through innovative training methods. It adopts the HuggingFace dataset format, supports multimodal inputs (text and images), and provides a complete training pipeline, including optional model warm-up and the core RISE training stages.
 
-> **Code is Coming Soon!**
-> The project is under active development, and code will be released soon. Please click "Watch" and "Star" in the upper right corner to stay updated!
 
 ## 📋 Table of Contents
 
